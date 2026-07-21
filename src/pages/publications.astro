@@ -1,0 +1,233 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+
+const all = (await getCollection('publications')).sort(
+  (a, b) => b.data.year - a.data.year || a.data.title.localeCompare(b.data.title),
+);
+
+const selected = all.filter((p) => p.data.selected);
+
+const years = [...new Set(all.map((p) => p.data.year))].sort((a, b) => b - a);
+const topics = [...new Set(all.map((p) => p.data.topic))].sort();
+const types = [
+  { value: 'journal', label: 'Journal' },
+  { value: 'conference', label: 'Conference' },
+  { value: 'preprint', label: 'Preprint' },
+];
+---
+
+<BaseLayout
+  title="Publications"
+  description="Publications from The Kuo Lab at Michigan State University."
+>
+  <PageHeader
+    eyebrow="Our work"
+    title="Publications"
+    intro="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Selected Publications</h2>
+      </div>
+      <div class="pub-list">
+        {selected.map((entry) => <PublicationCard entry={entry} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--subtle">
+    <div class="container">
+      <div class="section-heading">
+        <h2>All Publications</h2>
+      </div>
+
+      <form class="filters" data-pub-filters role="search" aria-label="Filter publications">
+        <div class="field field--grow">
+          <label for="pub-search">Search</label>
+          <input
+            type="search"
+            id="pub-search"
+            name="search"
+            placeholder="Title, author, venue…"
+            autocomplete="off"
+          />
+        </div>
+
+        <div class="field">
+          <label for="pub-year">Year</label>
+          <select id="pub-year" name="year">
+            <option value="">All years</option>
+            {years.map((year) => <option value={year}>{year}</option>)}
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="pub-type">Type</label>
+          <select id="pub-type" name="type">
+            <option value="">All types</option>
+            {types.map((t) => <option value={t.value}>{t.label}</option>)}
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="pub-topic">Topic</label>
+          <select id="pub-topic" name="topic">
+            <option value="">All topics</option>
+            {topics.map((topic) => <option value={topic}>{topic}</option>)}
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="pub-sort">Sort</label>
+          <select id="pub-sort" name="sort">
+            <option value="year-desc">Newest first</option>
+            <option value="year-asc">Oldest first</option>
+            <option value="title-asc">Title (A–Z)</option>
+          </select>
+        </div>
+
+        <button type="button" class="btn btn--ghost" data-pub-reset>Reset</button>
+      </form>
+
+      <p class="result-count small muted" data-pub-count aria-live="polite"></p>
+
+      <div class="pub-list" data-pub-list>
+        {all.map((entry) => <PublicationCard entry={entry} />)}
+      </div>
+
+      <p class="empty" data-pub-empty hidden>
+        No publications match these filters. Try clearing the search or resetting the filters.
+      </p>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 0.85rem;
+    padding: 1.1rem;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    min-width: 8.5rem;
+  }
+
+  .field--grow {
+    flex: 1 1 15rem;
+  }
+
+  .field label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .field input,
+  .field select {
+    width: 100%;
+    padding: 0.5rem 0.6rem;
+    font: inherit;
+    font-size: 0.95rem;
+    color: var(--text);
+    background: var(--bg);
+    border: 1px solid var(--border-strong);
+    border-radius: var(--radius-sm);
+  }
+
+  .field input:focus-visible,
+  .field select:focus-visible {
+    border-color: var(--accent);
+  }
+
+  .result-count {
+    margin-top: 1rem;
+  }
+
+  .empty {
+    padding: 2rem 0;
+    color: var(--text-muted);
+  }
+
+  .empty[hidden] {
+    display: none;
+  }
+</style>
+
+<script>
+  const form = document.querySelector<HTMLFormElement>('[data-pub-filters]');
+  const list = document.querySelector<HTMLElement>('[data-pub-list]');
+  const countEl = document.querySelector<HTMLElement>('[data-pub-count]');
+  const emptyEl = document.querySelector<HTMLElement>('[data-pub-empty]');
+
+  if (form && list && countEl && emptyEl) {
+    const items = Array.from(list.querySelectorAll<HTMLElement>('[data-pub]'));
+    const search = form.querySelector<HTMLInputElement>('#pub-search')!;
+    const year = form.querySelector<HTMLSelectElement>('#pub-year')!;
+    const type = form.querySelector<HTMLSelectElement>('#pub-type')!;
+    const topic = form.querySelector<HTMLSelectElement>('#pub-topic')!;
+    const sort = form.querySelector<HTMLSelectElement>('#pub-sort')!;
+
+    function apply() {
+      const q = search.value.trim().toLowerCase();
+      let visible = 0;
+
+      for (const item of items) {
+        const matches =
+          (!q || (item.dataset.search ?? '').includes(q)) &&
+          (!year.value || item.dataset.year === year.value) &&
+          (!type.value || item.dataset.type === type.value) &&
+          (!topic.value || item.dataset.topic === topic.value);
+
+        item.hidden = !matches;
+        if (matches) visible++;
+      }
+
+      const ordered = [...items].sort((a, b) => {
+        const ay = Number(a.dataset.year);
+        const by = Number(b.dataset.year);
+        const at = a.querySelector('h3')?.textContent ?? '';
+        const bt = b.querySelector('h3')?.textContent ?? '';
+
+        if (sort.value === 'year-asc') return ay - by || at.localeCompare(bt);
+        if (sort.value === 'title-asc') return at.localeCompare(bt);
+        return by - ay || at.localeCompare(bt);
+      });
+      list!.append(...ordered);
+
+      countEl!.textContent = `Showing ${visible} of ${items.length} publications`;
+      emptyEl!.hidden = visible !== 0;
+    }
+
+    /* Deep links from the Research page, e.g. /publications?topic=Data%20%26%20Methods */
+    const params = new URLSearchParams(window.location.search);
+    const initialTopic = params.get('topic');
+    if (initialTopic && [...topic.options].some((o) => o.value === initialTopic)) {
+      topic.value = initialTopic;
+    }
+
+    form.addEventListener('input', apply);
+    form.addEventListener('change', apply);
+    form.querySelector('[data-pub-reset]')?.addEventListener('click', () => {
+      form.reset();
+      apply();
+    });
+
+    apply();
+  }
+</script>

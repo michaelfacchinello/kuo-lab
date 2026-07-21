@@ -1,0 +1,98 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  entry: CollectionEntry<'publications'>;
+}
+
+const { entry } = Astro.props;
+const { title, authors, venue, year, type, topic, selected, doi, pdf, code } = entry.data;
+
+const typeLabel = { journal: 'Journal', conference: 'Conference', preprint: 'Preprint' }[type];
+
+/* Data attributes drive the client-side filter/sort/search on /publications. */
+const searchText = [title, venue, topic, ...authors].join(' ').toLowerCase();
+---
+
+<article
+  class="pub"
+  data-pub
+  data-year={year}
+  data-type={type}
+  data-topic={topic}
+  data-selected={String(selected)}
+  data-search={searchText}
+>
+  <h3 class="pub-title">{title}</h3>
+  <p class="pub-authors small">{authors.join(', ')}</p>
+  <p class="pub-venue small muted"><em>{venue}</em>, {year}</p>
+
+  <ul class="tag-list pub-meta">
+    <li><span class="tag">{typeLabel}</span></li>
+    <li><span class="tag">{topic}</span></li>
+    {selected && <li><span class="tag tag--selected">Selected</span></li>}
+  </ul>
+
+  {
+    (doi || pdf || code) && (
+      <ul class="link-list pub-links">
+        {doi && (
+          <li>
+            <a href={`https://doi.org/${doi}`} rel="noopener">
+              DOI
+            </a>
+          </li>
+        )}
+        {pdf && (
+          <li>
+            <a href={pdf} rel="noopener">
+              PDF
+            </a>
+          </li>
+        )}
+        {code && (
+          <li>
+            <a href={code} rel="noopener">
+              Code
+            </a>
+          </li>
+        )}
+      </ul>
+    )
+  }
+</article>
+
+<style>
+  .pub {
+    padding: 1.15rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pub[hidden] {
+    display: none;
+  }
+
+  .pub-title {
+    font-size: 1.05rem;
+    line-height: 1.35;
+    margin-bottom: 0.3rem;
+  }
+
+  .pub-authors {
+    color: var(--text);
+  }
+
+  .pub-meta {
+    margin-top: 0.6rem;
+  }
+
+  .pub-links {
+    margin-top: 0.55rem;
+    font-weight: 600;
+  }
+
+  .tag--selected {
+    background: var(--brand);
+    color: var(--brand-contrast);
+  }
+</style>

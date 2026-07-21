@@ -1,0 +1,128 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import NewsCard from '../components/NewsCard.astro';
+import PublicationCard from '../components/PublicationCard.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { site, researchAreas } from '../lib/site';
+import { url } from '../lib/url';
+
+const news = (await getCollection('news'))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const featured = (await getCollection('publications'))
+  .filter((p) => p.data.selected)
+  .sort((a, b) => b.data.year - a.data.year)
+  .slice(0, 3);
+---
+
+<BaseLayout>
+  <section class="hero">
+    <div class="container hero-inner">
+      <div class="hero-copy">
+        <p class="eyebrow">{site.institution}</p>
+        <h1>{site.name}</h1>
+        <p class="hero-pi">{site.pi}, Principal Investigator</p>
+        <p class="hero-tagline">{site.tagline}</p>
+        <div class="hero-actions">
+          <a class="btn btn--primary" href={url('/research')}>Explore our research</a>
+          <a class="btn btn--ghost" href={url('/people')}>Meet the team</a>
+        </div>
+      </div>
+      <Placeholder label="Lab Photo Here" ratio="4 / 3" class="hero-image" />
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Research Focus</h2>
+        <a href={url('/research')}>All research areas →</a>
+      </div>
+      <div class="grid grid--3">
+        {
+          researchAreas.map((area) => (
+            <article class="card">
+              <h3>{area.title}</h3>
+              <p class="small muted">{area.summary}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--subtle">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Latest News</h2>
+        <a href={url('/news')}>All news →</a>
+      </div>
+      <div class="grid grid--3">
+        {news.map((entry) => <NewsCard entry={entry} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Recent Publications</h2>
+        <a href={url('/publications')}>All publications →</a>
+      </div>
+      <div class="pub-list">
+        {featured.map((entry) => <PublicationCard entry={entry} />)}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .hero {
+    padding-block: clamp(2.5rem, 7vw, 5rem);
+    background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .hero-inner {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 3rem);
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr);
+    align-items: center;
+  }
+
+  @media (max-width: 800px) {
+    .hero-inner {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .hero-copy h1 {
+    margin-block: 0.4rem 0.5rem;
+  }
+
+  .hero-pi {
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--accent-2);
+  }
+
+  .hero-tagline {
+    max-width: 46ch;
+    margin-top: 0.85rem;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+  }
+
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+
+  .pub-list > :global(.pub:first-child) {
+    padding-top: 0;
+  }
+</style>

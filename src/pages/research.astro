@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { researchAreas, sponsors } from '../lib/site';
+import { url } from '../lib/url';
+---
+
+<BaseLayout
+  title="Research"
+  description="Research focus areas of The Kuo Lab at Michigan State University."
+>
+  <PageHeader
+    eyebrow="What we do"
+    title="Research Focus"
+    intro="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation."
+  />
+
+  <section class="section">
+    <div class="container">
+      <ol class="areas">
+        {
+          researchAreas.map((area, i) => (
+            <li class="area" id={`area-${i + 1}`}>
+              <div class="area-media">
+                <Placeholder label="Research Photo Here" ratio="4 / 3" />
+              </div>
+              <div class="area-copy">
+                <p class="eyebrow">Focus Area {String(i + 1).padStart(2, '0')}</p>
+                <h2>{area.title}</h2>
+                <div class="prose stack">
+                  <p>{area.summary}</p>
+                  <p>{area.body}</p>
+                </div>
+                <p class="area-link">
+                  <a href={`${url('/publications')}?topic=${encodeURIComponent(area.title)}`}>
+                    Publications in this area →
+                  </a>
+                </p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section section--subtle">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Funding &amp; Support</h2>
+      </div>
+      <p class="prose muted">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+        labore et dolore magna aliqua.
+      </p>
+      <ul class="sponsors">
+        {
+          sponsors.map((sponsor) => (
+            <li>
+              <Placeholder label={sponsor} ratio="16 / 7" />
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .areas {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: clamp(2.5rem, 6vw, 4rem);
+  }
+
+  .area {
+    display: grid;
+    gap: clamp(1.25rem, 4vw, 2.5rem);
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    align-items: start;
+  }
+
+  /* Alternate image side on wide screens for visual rhythm. */
+  .area:nth-child(even) .area-media {
+    order: 2;
+  }
+
+  @media (max-width: 800px) {
+    .area {
+      grid-template-columns: 1fr;
+    }
+    .area:nth-child(even) .area-media {
+      order: 0;
+    }
+  }
+
+  .area-copy h2 {
+    margin-block: 0.35rem 0.9rem;
+  }
+
+  .area-link {
+    margin-top: 1.1rem;
+    font-weight: 600;
+  }
+
+  .sponsors {
+    list-style: none;
+    padding: 0;
+    margin-top: 1.75rem;
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  }
+</style>

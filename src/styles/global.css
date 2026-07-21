@@ -1,0 +1,467 @@
+/* ==========================================================================
+   The Kuo Lab — global stylesheet
+   Palette: Michigan State University brand colors (see lab-website-spec.md §3)
+   ========================================================================== */
+
+:root {
+  /* --- MSU brand (fixed values, do not theme) --- */
+  --msu-spartan-green: #18453b;
+  --msu-kelly-green: #008208;
+  --msu-excellence-green: #0b9a6d;
+  --msu-lime-green: #7bbd00;
+  --msu-white: #ffffff;
+  --msu-black: #000000;
+
+  /* --- Typography --- */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto,
+    'Helvetica Neue', Arial, sans-serif;
+  --font-serif: ui-serif, Georgia, Cambria, 'Times New Roman', Times, serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* --- Layout --- */
+  --measure: 68ch;
+  --page-max: 1120px;
+  --gutter: clamp(1rem, 4vw, 2.5rem);
+  --radius: 10px;
+  --radius-sm: 6px;
+
+  /* --- Motion --- */
+  --transition: 150ms ease;
+}
+
+/* --- Semantic tokens: light mode (default) --- */
+:root,
+:root[data-theme='light'] {
+  color-scheme: light;
+
+  --bg: var(--msu-white);
+  --bg-subtle: #f4f6f5;
+  --bg-raised: var(--msu-white);
+  --border: #dfe4e2;
+  --border-strong: #c3ccc9;
+
+  --text: #111614;
+  --text-muted: #55605c;
+  --text-inverse: var(--msu-white);
+
+  --brand: var(--msu-spartan-green);
+  --brand-contrast: var(--msu-white);
+  --accent: var(--msu-kelly-green);
+  --accent-2: var(--msu-excellence-green);
+  --accent-3: var(--msu-lime-green);
+
+  --link: var(--msu-spartan-green);
+  --link-hover: var(--msu-kelly-green);
+
+  --header-bg: var(--msu-spartan-green);
+  --header-text: var(--msu-white);
+  --header-text-muted: #cddbd6;
+
+  --tag-bg: #e7f1ec;
+  --tag-text: #10493c;
+
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.04), 0 4px 16px rgb(0 0 0 / 0.06);
+  --focus: var(--msu-kelly-green);
+}
+
+/* --- Semantic tokens: dark mode --- */
+:root[data-theme='dark'] {
+  color-scheme: dark;
+
+  --bg: #0e1211;
+  --bg-subtle: #161b1a;
+  --bg-raised: #171d1b;
+  --border: #2a3230;
+  --border-strong: #3d4744;
+
+  --text: #eef2f0;
+  --text-muted: #a3afab;
+  --text-inverse: #0e1211;
+
+  /* Spartan Green is too dark to read on near-black — brighten for dark mode. */
+  --brand: #2f7f6d;
+  --brand-contrast: var(--msu-white);
+  --accent: #3ec98d;
+  --accent-2: var(--msu-excellence-green);
+  --accent-3: var(--msu-lime-green);
+
+  --link: #4ed69a;
+  --link-hover: var(--msu-lime-green);
+
+  --header-bg: #10231e;
+  --header-text: #eef2f0;
+  --header-text-muted: #9fb3ac;
+
+  --tag-bg: #16302a;
+  --tag-text: #7fdcb6;
+
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 16px rgb(0 0 0 / 0.3);
+  --focus: #4ed69a;
+}
+
+/* Respect the OS preference until the visitor picks a theme explicitly.
+   The inline script in BaseLayout stamps data-theme before first paint, so
+   this block is a no-JS fallback. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+    --bg: #0e1211;
+    --bg-subtle: #161b1a;
+    --bg-raised: #171d1b;
+    --border: #2a3230;
+    --border-strong: #3d4744;
+    --text: #eef2f0;
+    --text-muted: #a3afab;
+    --text-inverse: #0e1211;
+    --brand: #2f7f6d;
+    --accent: #3ec98d;
+    --link: #4ed69a;
+    --link-hover: var(--msu-lime-green);
+    --header-bg: #10231e;
+    --header-text: #eef2f0;
+    --header-text-muted: #9fb3ac;
+    --tag-bg: #16302a;
+    --tag-text: #7fdcb6;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 4px 16px rgb(0 0 0 / 0.3);
+    --focus: #4ed69a;
+  }
+}
+
+/* ==========================================================================
+   Reset / base
+   ========================================================================== */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+body {
+  min-height: 100dvh;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--text);
+  background: var(--bg);
+  -webkit-font-smoothing: antialiased;
+  transition: background-color var(--transition), color var(--transition);
+}
+
+img,
+svg,
+video {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-sans);
+  line-height: 1.2;
+  text-wrap: balance;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+}
+
+h1 {
+  font-size: clamp(2rem, 1.4rem + 2.6vw, 3rem);
+}
+h2 {
+  font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2rem);
+}
+h3 {
+  font-size: 1.2rem;
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+a {
+  color: var(--link);
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.18em;
+  transition: color var(--transition);
+}
+
+a:hover {
+  color: var(--link-hover);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+  border-radius: 3px;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 2.5rem 0;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* ==========================================================================
+   Layout primitives
+   ========================================================================== */
+
+.container {
+  width: 100%;
+  max-width: var(--page-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+}
+
+.container--narrow {
+  max-width: 760px;
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.section {
+  padding-block: clamp(2.5rem, 6vw, 4.5rem);
+}
+
+.section--subtle {
+  background: var(--bg-subtle);
+  border-block: 1px solid var(--border);
+}
+
+.stack > * + * {
+  margin-top: 1rem;
+}
+
+.prose {
+  max-width: var(--measure);
+}
+
+.prose p + p {
+  margin-top: 1rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+}
+
+/* ==========================================================================
+   Shared components
+   ========================================================================== */
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+  padding: 0.6rem 1rem;
+  background: var(--bg);
+  color: var(--link);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+}
+
+.skip-link:focus {
+  left: 0.5rem;
+  top: 0.5rem;
+}
+
+.section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+  margin-bottom: 1.75rem;
+}
+
+.section-heading h2 {
+  position: relative;
+  padding-bottom: 0.5rem;
+}
+
+.section-heading h2::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 2.5rem;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--accent);
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-2);
+}
+
+.card {
+  background: var(--bg-raised);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  transition: border-color var(--transition), transform var(--transition),
+    box-shadow var(--transition);
+}
+
+.card:hover {
+  border-color: var(--accent-2);
+  box-shadow: var(--shadow);
+}
+
+.card h3 {
+  margin-bottom: 0.4rem;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.small {
+  font-size: 0.9rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  line-height: 1.5;
+  border-radius: 999px;
+  background: var(--tag-bg);
+  color: var(--tag-text);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  list-style: none;
+  padding: 0;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.6rem 1.1rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--transition), color var(--transition),
+    border-color var(--transition);
+}
+
+.btn--primary {
+  background: var(--brand);
+  color: var(--brand-contrast);
+}
+
+.btn--primary:hover {
+  background: var(--accent);
+  color: var(--brand-contrast);
+}
+
+.btn--ghost {
+  border-color: var(--border-strong);
+  color: var(--text);
+  background: transparent;
+}
+
+.btn--ghost:hover {
+  border-color: var(--accent);
+  color: var(--link-hover);
+}
+
+.link-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.9rem;
+  list-style: none;
+  padding: 0;
+  font-size: 0.9rem;
+}
+
+.date {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ==========================================================================
+   Markdown body content (news detail pages)
+   ========================================================================== */
+
+.markdown {
+  max-width: var(--measure);
+}
+
+.markdown > * + * {
+  margin-top: 1.1rem;
+}
+
+.markdown h2,
+.markdown h3 {
+  margin-top: 2rem;
+}
+
+.markdown ul,
+.markdown ol {
+  padding-left: 1.4rem;
+}
+
+.markdown blockquote {
+  border-left: 3px solid var(--accent);
+  padding-left: 1rem;
+  color: var(--text-muted);
+  font-style: italic;
+}

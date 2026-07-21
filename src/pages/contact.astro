@@ -1,0 +1,104 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { site } from '../lib/site';
+---
+
+<BaseLayout
+  title="Contact"
+  description="Contact The Kuo Lab at Michigan State University, East Lansing."
+>
+  <PageHeader
+    eyebrow="Get in touch"
+    title="Contact Us"
+    intro="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore."
+  />
+
+  <section class="section">
+    <div class="container contact">
+      <div class="contact-details stack">
+        <div>
+          <h2 class="contact-heading">Email</h2>
+          <p><a href={`mailto:${site.contact.email}`}>{site.contact.email}</a></p>
+        </div>
+
+        <div>
+          <h2 class="contact-heading">Mailing Address</h2>
+          <address>
+            {site.contact.address.map((line) => <span>{line}</span>)}
+          </address>
+        </div>
+
+        <div>
+          <h2 class="contact-heading">Find Us Online</h2>
+          <ul class="link-list contact-social">
+            <li><a href={site.social.scholar} rel="noopener">Google Scholar</a></li>
+            <li><a href={site.social.github} rel="noopener">GitHub</a></li>
+            <li><a href={site.social.x} rel="noopener">X / Twitter</a></li>
+            <li><a href={site.social.linkedin} rel="noopener">LinkedIn</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h2 class="contact-heading">Prospective Students</h2>
+          <p class="muted">
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+            incididunt ut labore et dolore magna aliqua.
+          </p>
+        </div>
+      </div>
+
+      <div class="contact-map">
+        <h2 class="contact-heading">Location</h2>
+        {/* PLACEHOLDER: swap for an embedded map or a campus photo in Phase 2. */}
+        <Placeholder label="Campus Map Here" ratio="4 / 3" />
+        <p class="small muted map-note">
+          Michigan State University · East Lansing, Michigan
+        </p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .contact {
+    display: grid;
+    gap: clamp(1.75rem, 5vw, 3rem);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  @media (max-width: 760px) {
+    .contact {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .contact-details > * + * {
+    margin-top: 1.75rem;
+  }
+
+  .contact-heading {
+    font-size: 0.82rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-2);
+    margin-bottom: 0.4rem;
+  }
+
+  address {
+    display: flex;
+    flex-direction: column;
+    font-style: normal;
+  }
+
+  .contact-social {
+    font-weight: 600;
+  }
+
+  .map-note {
+    margin-top: 0.6rem;
+  }
+</style>

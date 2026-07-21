@@ -1,0 +1,104 @@
+---
+import { site, nav } from '../lib/site';
+import { url } from '../lib/url';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-col">
+      <p class="footer-name">{site.name}</p>
+      <p class="small">{site.institution}</p>
+      <p class="small">
+        <a href={`mailto:${site.contact.email}`}>{site.contact.email}</a>
+      </p>
+    </div>
+
+    <div class="footer-col">
+      <h2 class="footer-heading">Explore</h2>
+      <ul>
+        {nav.map((item) => <li><a href={url(item.href)}>{item.label}</a></li>)}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h2 class="footer-heading">Elsewhere</h2>
+      <ul>
+        <li><a href={site.social.scholar}>Google Scholar</a></li>
+        <li><a href={site.social.github}>GitHub</a></li>
+        <li><a href={site.social.x}>X / Twitter</a></li>
+        <li><a href={site.social.linkedin}>LinkedIn</a></li>
+        <li><a href={url('/rss.xml')}>RSS feed</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="container footer-base">
+    <p class="small">© {year} {site.name}, {site.institution}.</p>
+    <p class="small">Prototype site — content shown is placeholder text.</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: auto;
+    background: var(--header-bg);
+    color: var(--header-text);
+    padding-top: 2.5rem;
+  }
+
+  .footer-inner {
+    display: grid;
+    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    padding-bottom: 2rem;
+  }
+
+  .footer-name {
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  .footer-heading {
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--header-text-muted);
+    margin-bottom: 0.6rem;
+  }
+
+  .footer-col ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: 0.92rem;
+  }
+
+  .site-footer a {
+    color: var(--header-text);
+    text-decoration: none;
+  }
+
+  .site-footer a:hover {
+    color: var(--msu-lime-green);
+    text-decoration: underline;
+  }
+
+  .footer-col .small,
+  .footer-base .small {
+    color: var(--header-text-muted);
+  }
+
+  .footer-base {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.5rem;
+    justify-content: space-between;
+    padding-block: 1rem;
+    border-top: 1px solid rgb(255 255 255 / 0.12);
+  }
+</style>

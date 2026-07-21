@@ -1,0 +1,79 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import Placeholder from './Placeholder.astro';
+
+interface Props {
+  entry: CollectionEntry<'people'>;
+  bio?: string;
+}
+
+const { entry, bio } = Astro.props;
+const { name, title, interests, email, website, github, scholar } = entry.data;
+---
+
+<article class="card member">
+  <Placeholder label="Photo Here" ratio="1 / 1" rounded="circle" class="member-photo" />
+
+  <div class="member-body">
+    <h3>{name}</h3>
+    <p class="member-title small">{title}</p>
+
+    {bio && <p class="small muted member-bio">{bio}</p>}
+
+    {
+      interests.length > 0 && (
+        <ul class="tag-list member-interests">
+          {interests.map((i) => (
+            <li>
+              <span class="tag">{i}</span>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    <ul class="link-list member-links">
+      {email && <li><a href={`mailto:${email}`}>Email</a></li>}
+      {website && <li><a href={website} rel="noopener">Website</a></li>}
+      {scholar && <li><a href={scholar} rel="noopener">Scholar</a></li>}
+      {github && <li><a href={github} rel="noopener">GitHub</a></li>}
+    </ul>
+  </div>
+</article>
+
+<style>
+  .member {
+    display: flex;
+    flex-direction: column;
+    gap: 0.9rem;
+    height: 100%;
+  }
+
+  .member :global(.member-photo) {
+    width: 5.5rem;
+  }
+
+  .member-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+
+  .member-title {
+    font-weight: 600;
+    color: var(--accent-2);
+  }
+
+  .member-bio {
+    margin-top: 0.15rem;
+  }
+
+  .member-interests,
+  .member-links {
+    margin-top: 0.35rem;
+  }
+
+  .member-links {
+    font-weight: 600;
+  }
+</style>

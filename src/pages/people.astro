@@ -1,0 +1,200 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import MemberCard from '../components/MemberCard.astro';
+import Placeholder from '../components/Placeholder.astro';
+import { site } from '../lib/site';
+import { url } from '../lib/url';
+
+const people = await getCollection('people');
+const pi = people.find((p) => p.data.role === 'pi');
+const members = people
+  .filter((p) => p.data.role === 'member')
+  .sort((a, b) => a.data.order - b.data.order);
+const alumni = (await getCollection('alumni')).sort((a, b) =>
+  a.data.name.localeCompare(b.data.name),
+);
+
+const { Content: PiBio } = pi ? await render(pi) : { Content: null };
+---
+
+<BaseLayout
+  title="People"
+  description="The team behind The Kuo Lab at Michigan State University."
+>
+  <PageHeader
+    eyebrow="Who we are"
+    title="Meet the Team"
+    intro="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  />
+
+  {
+    pi && (
+      <section class="section">
+        <div class="container">
+          <div class="section-heading">
+            <h2>Principal Investigator</h2>
+          </div>
+          <div class="pi">
+            <div class="pi-media">
+              <Placeholder label="Photo Here" ratio="3 / 4" />
+              <ul class="link-list pi-links">
+                {pi.data.email && (
+                  <li>
+                    <a href={`mailto:${pi.data.email}`}>{pi.data.email}</a>
+                  </li>
+                )}
+                {pi.data.cv && (
+                  <li>
+                    <a href={pi.data.cv} rel="noopener">
+                      Curriculum Vitae (PDF)
+                    </a>
+                  </li>
+                )}
+                {pi.data.scholar && (
+                  <li>
+                    <a href={pi.data.scholar} rel="noopener">
+                      Google Scholar
+                    </a>
+                  </li>
+                )}
+                {pi.data.github && (
+                  <li>
+                    <a href={pi.data.github} rel="noopener">
+                      GitHub
+                    </a>
+                  </li>
+                )}
+              </ul>
+            </div>
+
+            <div class="pi-copy">
+              <h3 class="pi-name">{pi.data.name}</h3>
+              <p class="pi-title">
+                {pi.data.title}, {site.institution}
+              </p>
+              <div class="markdown">{PiBio && <PiBio />}</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section section--subtle">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Current Members</h2>
+      </div>
+      <div class="grid grid--3">
+        {members.map((entry) => <MemberCard entry={entry} bio={entry.body?.trim()} />)}
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="section-heading">
+        <h2>Lab Alumni</h2>
+      </div>
+      <ul class="alumni">
+        {
+          alumni.map((person) => (
+            <li class="alumnus">
+              <span class="alumnus-name">{person.data.name}</span>
+              <span class="small muted">
+                {person.data.title} · {person.data.years}
+              </span>
+              <span class="small">Now: {person.data.now}</span>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  <section class="section section--subtle">
+    <div class="container">
+      <div class="join">
+        <div>
+          <p class="eyebrow">Openings</p>
+          <h2>Join Us</h2>
+          <div class="prose stack">
+            <p>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+              exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+            </p>
+            <p>
+              Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat
+              nulla pariatur. Excepteur sint occaecat cupidatat non proident.
+            </p>
+          </div>
+          <p class="join-cta">
+            <a class="btn btn--primary" href={url('/contact')}>Get in touch</a>
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .pi {
+    display: grid;
+    gap: clamp(1.5rem, 4vw, 2.75rem);
+    grid-template-columns: minmax(0, 260px) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  @media (max-width: 760px) {
+    .pi {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .pi-links {
+    flex-direction: column;
+    gap: 0.3rem;
+    margin-top: 1rem;
+    font-weight: 600;
+  }
+
+  .pi-name {
+    font-size: 1.5rem;
+  }
+
+  .pi-title {
+    margin-bottom: 1rem;
+    font-weight: 600;
+    color: var(--accent-2);
+  }
+
+  .alumni {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 0.75rem;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  }
+
+  .alumnus {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    padding: 0.85rem 1rem;
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-2);
+    border-radius: var(--radius-sm);
+  }
+
+  .alumnus-name {
+    font-weight: 700;
+  }
+
+  .join-cta {
+    margin-top: 1.5rem;
+  }
+</style>

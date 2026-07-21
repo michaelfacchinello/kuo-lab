@@ -1,0 +1,70 @@
+---
+/**
+ * Placeholder image box for the prototype phase.
+ *
+ * Deliberately self-contained (no external image host) so the site renders
+ * identically offline and in CI. In Phase 2 replace each usage with a real
+ * <Image /> — the surrounding layout does not need to change.
+ */
+interface Props {
+  label?: string;
+  ratio?: string;
+  rounded?: 'default' | 'circle';
+  class?: string;
+}
+
+const { label = 'Image Here', ratio = '16 / 9', rounded = 'default', class: className } = Astro.props;
+---
+
+<div
+  class:list={['placeholder', rounded === 'circle' && 'placeholder--circle', className]}
+  style={`aspect-ratio: ${ratio};`}
+  role="img"
+  aria-label={`Placeholder: ${label}`}
+>
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <rect x="3" y="4.5" width="18" height="15" rx="2"></rect>
+    <circle cx="8.5" cy="10" r="1.6"></circle>
+    <path d="M4 17.5 9.5 12l3.5 3.5L16 13l4 4.5"></path>
+  </svg>
+  <span>{label}</span>
+</div>
+
+<style>
+  .placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    width: 100%;
+    padding: 0.75rem;
+    text-align: center;
+    background: var(--bg-subtle);
+    border: 1px dashed var(--border-strong);
+    border-radius: var(--radius);
+    color: var(--text-muted);
+    overflow: hidden;
+  }
+
+  .placeholder--circle {
+    border-radius: 50%;
+  }
+
+  .placeholder svg {
+    width: 1.6rem;
+    height: 1.6rem;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    opacity: 0.7;
+  }
+
+  .placeholder span {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+</style>

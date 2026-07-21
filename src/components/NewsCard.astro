@@ -1,0 +1,60 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { url } from '../lib/url';
+import { formatDate } from '../lib/date';
+
+interface Props {
+  entry: CollectionEntry<'news'>;
+}
+
+const { entry } = Astro.props;
+const { title, date, summary, tags } = entry.data;
+const href = url(`/news/${entry.id}`);
+---
+
+<article class="card news">
+  <time class="date" datetime={date.toISOString()}>{formatDate(date)}</time>
+  <h3><a href={href}>{title}</a></h3>
+  <p class="small muted">{summary}</p>
+  {
+    tags.length > 0 && (
+      <ul class="tag-list news-tags">
+        {tags.map((tag) => (
+          <li>
+            <span class="tag">{tag}</span>
+          </li>
+        ))}
+      </ul>
+    )
+  }
+</article>
+
+<style>
+  .news {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+    height: 100%;
+  }
+
+  .news h3 {
+    font-size: 1.05rem;
+    line-height: 1.35;
+    margin-bottom: 0;
+  }
+
+  .news h3 a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .news h3 a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+  }
+
+  .news-tags {
+    margin-top: auto;
+    padding-top: 0.5rem;
+  }
+</style>
