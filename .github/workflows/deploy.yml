@@ -1,9 +1,12 @@
 name: Deploy to GitHub Pages
 
 on:
-  push:
-    branches: [main]
-  # Allows running the workflow manually from the Actions tab.
+  # Manual-only: this site is intentionally kept private for now, so it does
+  # NOT auto-publish on push. Run it from the Actions tab ("Run workflow") once
+  # you've enabled GitHub Pages and are ready to go public. To restore
+  # publish-on-push later, add back:
+  #   push:
+  #     branches: [main]
   workflow_dispatch:
 
 # Least-privilege token scoped for the Pages deployment.
