@@ -13,7 +13,7 @@ import { defineConfig } from 'astro/config';
 //                    ...and add `public/CNAME` containing the bare domain.
 // ---------------------------------------------------------------------------
 export default defineConfig({
-  site: 'https://example.github.io',
+  site: 'https://michaelfacchinello.github.io',
   base: '/kuo-lab',
   trailingSlash: 'ignore',
   build: {

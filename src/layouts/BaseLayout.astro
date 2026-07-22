@@ -20,6 +20,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://example.com
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{pageTitle}</title>
+    {/* PROTOTYPE ONLY: keep search engines away until real launch. Remove this
+        line (and this comment) when the site goes live for real. */}
+    <meta name="robots" content="noindex, nofollow" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
