@@ -14,15 +14,11 @@ const news = (await getCollection('news')).sort(
   <PageHeader
     eyebrow="Updates"
     title="Lab News"
-    intro="Awards, papers, talks, and new members. Subscribe via the RSS feed to follow along."
+    intro="Awards, papers, talks, and new members from The Kuo Lab."
   />
 
   <section class="section">
     <div class="container container--narrow">
-      <p class="feed-link small">
-        <a href={url('/rss.xml')}>Subscribe via RSS →</a>
-      </p>
-
       <ol class="feed">
         {
           news.map((entry) => (
@@ -52,11 +48,6 @@ const news = (await getCollection('news')).sort(
 </BaseLayout>
 
 <style>
-  .feed-link {
-    margin-bottom: 1.5rem;
-    font-weight: 600;
-  }
-
   .feed {
     list-style: none;
     padding: 0;

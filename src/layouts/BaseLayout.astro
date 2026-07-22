@@ -26,12 +26,6 @@ const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://example.com
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
     <link rel="icon" href={url('/favicon.svg')} type="image/svg+xml" />
-    <link
-      rel="alternate"
-      type="application/rss+xml"
-      title={`${site.name} — News`}
-      href={url('/rss.xml')}
-    />
 
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content={site.name} />

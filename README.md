@@ -83,7 +83,7 @@ src/
   content/        Markdown + JSON content collections
   layouts/        BaseLayout (head, theme script, nav, footer)
   lib/            site metadata, base-aware url() helper, date formatting
-  pages/          One file per route; rss.xml.ts and publications.xml.ts are feeds
+  pages/          One file per route
   styles/         global.css — MSU palette + light/dark tokens
 public/           Static assets copied verbatim (favicon, future CNAME, logos)
 ```
