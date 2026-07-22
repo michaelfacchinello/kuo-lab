@@ -3,7 +3,7 @@ name: 'Richard Miles'
 title: 'Undergraduate Researcher'
 role: 'member'
 order: 4
-interests: ['Computational Modeling', 'Data & Methods']
+interests: ['Gene Expression & Regulation', 'Cell Growth & Signaling']
 email: 'milesric@msu.edu'
 ---
 

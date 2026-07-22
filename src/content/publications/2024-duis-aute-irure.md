@@ -4,7 +4,7 @@ authors: ['A. N. Other', 'John Roe', 'M. Kuo']
 venue: 'Proceedings of the Placeholder Workshop'
 year: 2024
 type: 'conference'
-topic: 'Experimental Systems'
+topic: 'Chromatin & Epigenetics'
 selected: false
 doi: '10.0000/placeholder-0005'
 ---

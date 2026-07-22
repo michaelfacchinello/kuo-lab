@@ -1,9 +1,15 @@
 ---
+import { getCollection, render } from 'astro:content';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHeader from '../components/PageHeader.astro';
 import Placeholder from '../components/Placeholder.astro';
-import { researchAreas, sponsors } from '../lib/site';
+import { sponsors } from '../lib/site';
 import { url } from '../lib/url';
+
+const areas = (await getCollection('research')).sort((a, b) => a.data.order - b.data.order);
+const rendered = await Promise.all(
+  areas.map(async (area) => ({ area, Content: (await render(area)).Content })),
+);
 ---
 
 <BaseLayout
@@ -20,20 +26,20 @@ import { url } from '../lib/url';
     <div class="container">
       <ol class="areas">
         {
-          researchAreas.map((area, i) => (
+          rendered.map(({ area, Content }, i) => (
             <li class="area" id={`area-${i + 1}`}>
               <div class="area-media">
                 <Placeholder label="Research Photo Here" ratio="4 / 3" />
               </div>
               <div class="area-copy">
                 <p class="eyebrow">Focus Area {String(i + 1).padStart(2, '0')}</p>
-                <h2>{area.title}</h2>
-                <div class="prose stack">
-                  <p>{area.summary}</p>
-                  <p>{area.body}</p>
+                <h2>{area.data.title}</h2>
+                <div class="prose markdown">
+                  <p>{area.data.summary}</p>
+                  <Content />
                 </div>
                 <p class="area-link">
-                  <a href={`${url('/publications')}?topic=${encodeURIComponent(area.title)}`}>
+                  <a href={`${url('/publications')}?topic=${encodeURIComponent(area.data.title)}`}>
                     Publications in this area →
                   </a>
                 </p>

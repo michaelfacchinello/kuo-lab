@@ -11,8 +11,9 @@ const { entry, bio } = Astro.props;
 const { name, title, interests, email, website, github, scholar } = entry.data;
 ---
 
+{/* Mini version of the PI profile: portrait photo beside the bio. */}
 <article class="card member">
-  <Placeholder label="Photo Here" ratio="1 / 1" rounded="circle" class="member-photo" />
+  <Placeholder label="Photo Here" ratio="3 / 4" class="member-photo" />
 
   <div class="member-body">
     <h3>{name}</h3>
@@ -43,14 +44,15 @@ const { name, title, interests, email, website, github, scholar } = entry.data;
 
 <style>
   .member {
-    display: flex;
-    flex-direction: column;
-    gap: 0.9rem;
-    height: 100%;
+    display: grid;
+    grid-template-columns: 150px minmax(0, 1fr);
+    gap: 1.15rem;
+    align-items: start;
   }
 
+  /* Portrait with the site's standard rounded corners, like the PI photo. */
   .member :global(.member-photo) {
-    width: 5.5rem;
+    width: 100%;
   }
 
   .member-body {
@@ -74,6 +76,19 @@ const { name, title, interests, email, website, github, scholar } = entry.data;
   }
 
   .member-links {
+    margin-top: auto;
+    padding-top: 0.5rem;
     font-weight: 600;
+  }
+
+  /* Very narrow screens: stack the photo above the text. */
+  @media (max-width: 430px) {
+    .member {
+      grid-template-columns: 1fr;
+    }
+
+    .member :global(.member-photo) {
+      max-width: 200px;
+    }
   }
 </style>

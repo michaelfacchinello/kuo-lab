@@ -1,5 +1,5 @@
 import { defineCollection } from 'astro:content';
-import { glob, file } from 'astro/loaders';
+import { glob } from 'astro/loaders';
 // Namespace import of Astro's bundled zod v4. The `z` binding re-exported from
 // 'astro:content' is deprecated in Astro 7.
 import * as z from 'astro/zod';
@@ -59,13 +59,12 @@ const people = defineCollection({
 });
 
 /**
- * Alumni — a flat list in one JSON file, since each entry is only a couple of
- * fields and there is no long-form body.
+ * Alumni — one Markdown file per person, same copy-paste pattern as `people`.
+ * Only frontmatter is used; no body needed.
  */
 const alumni = defineCollection({
-  loader: file('./src/content/alumni.json'),
+  loader: glob({ pattern: '**/*.md', base: './src/content/alumni' }),
   schema: z.object({
-    id: z.string(),
     name: z.string(),
     title: z.string(),
     years: z.string(),
@@ -73,4 +72,18 @@ const alumni = defineCollection({
   }),
 });
 
-export const collections = { news, publications, people, alumni };
+/**
+ * Research areas — one Markdown file per focus area. Frontmatter holds the
+ * title/summary shown on cards; the body is the long description on the
+ * Research page. `topic` values on publications should match these titles.
+ */
+const research = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/research' }),
+  schema: z.object({
+    title: z.string(),
+    summary: z.string(),
+    order: z.number().default(99),
+  }),
+});
+
+export const collections = { news, publications, people, alumni, research };

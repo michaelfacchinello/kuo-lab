@@ -3,7 +3,7 @@ name: 'John Roe'
 title: 'Postdoctoral Researcher'
 role: 'member'
 order: 2
-interests: ['Experimental Systems']
+interests: ['Chromatin & Epigenetics']
 email: 'roejohn@msu.edu'
 website: 'https://example.com/'
 scholar: 'https://scholar.google.com/'

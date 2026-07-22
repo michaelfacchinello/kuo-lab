@@ -4,7 +4,7 @@ authors: ['Richard Miles', 'M. Kuo']
 venue: 'Placeholder Letters'
 year: 2025
 type: 'journal'
-topic: 'Data & Methods'
+topic: 'Cell Growth & Signaling'
 selected: false
 doi: '10.0000/placeholder-0003'
 ---

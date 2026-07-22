@@ -63,9 +63,9 @@ Most updates are Markdown edits and need no code changes.
 | News items | `src/content/news/*.md` — one file per item |
 | Publications | `src/content/publications/*.md` — one file per paper |
 | People | `src/content/people/*.md` — one file per member; body is the bio |
-| Alumni | `src/content/alumni.json` |
-| Lab name, PI, contact, socials | `src/lib/site.ts` |
-| Research focus areas, sponsors | `src/lib/site.ts` |
+| Alumni | `src/content/alumni/*.md` — one file per person |
+| Research focus areas | `src/content/research/*.md` — one file per area |
+| Lab name, PI, contact, socials, sponsors | `src/lib/site.ts` |
 
 Frontmatter fields for each collection are defined and validated in
 [`src/content.config.ts`](src/content.config.ts). A missing or misspelled field fails the build with
@@ -106,9 +106,9 @@ Swap placeholders for real content per the checklist in `lab-website-spec.md` §
 components carry over unchanged:
 
 - [ ] Mission statement, PI bio, photo, CV → `src/lib/site.ts`, `src/content/people/kuo.md`
-- [ ] Research focus areas → `src/lib/site.ts`
+- [ ] Research focus areas → `src/content/research/`
 - [ ] Publications (from BibTeX) → `src/content/publications/`
-- [ ] Team members and alumni → `src/content/people/`, `src/content/alumni.json`
+- [ ] Team members and alumni → `src/content/people/`, `src/content/alumni/`
 - [ ] News items → `src/content/news/`
 - [ ] Contact details and socials → `src/lib/site.ts`
 - [ ] Replace every `<Placeholder />` with a real image (see

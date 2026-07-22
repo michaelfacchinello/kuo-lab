@@ -3,9 +3,8 @@ name: 'Jane Doe'
 title: 'PhD Student'
 role: 'member'
 order: 1
-interests: ['Computational Modeling']
+interests: ['Gene Expression & Regulation']
 email: 'doejane@msu.edu'
-github: 'https://github.com/'
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor

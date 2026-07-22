@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import Placeholder from '../components/Placeholder.astro';
+
+/**
+ * PLACEHOLDER gallery. In Phase 2, replace each entry with a real photo
+ * (src + alt) and swap <Placeholder /> for an <Image />; the grid, captions,
+ * and layout stay as they are.
+ */
+const photos = [
+  { label: 'Lab Photo Here', caption: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.' },
+  { label: 'Research Photo Here', caption: 'Sed do eiusmod tempor incididunt ut labore et dolore.' },
+  { label: 'Team Photo Here', caption: 'Ut enim ad minim veniam, quis nostrud exercitation.' },
+  { label: 'Lab Photo Here', caption: 'Duis aute irure dolor in reprehenderit in voluptate.' },
+  { label: 'Event Photo Here', caption: 'Excepteur sint occaecat cupidatat non proident.' },
+  { label: 'Research Photo Here', caption: 'Sunt in culpa qui officia deserunt mollit anim.' },
+  { label: 'Team Photo Here', caption: 'Sed ut perspiciatis unde omnis iste natus error.' },
+  { label: 'Lab Photo Here', caption: 'Nemo enim ipsam voluptatem quia voluptas sit.' },
+  { label: 'Event Photo Here', caption: 'Neque porro quisquam est, qui dolorem ipsum quia.' },
+];
+---
+
+<BaseLayout
+  title="Gallery"
+  description="Photos from The Kuo Lab at Michigan State University — lab life, research, and events."
+>
+  <PageHeader
+    eyebrow="Lab life"
+    title="Gallery"
+    intro="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+  />
+
+  <section class="section">
+    <div class="container">
+      <ul class="gallery">
+        {
+          photos.map((photo) => (
+            <li>
+              <figure class="gallery-item">
+                <Placeholder label={photo.label} ratio="4 / 3" />
+                <figcaption class="small muted">{photo.caption}</figcaption>
+              </figure>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .gallery {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    gap: 1.75rem 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  }
+
+  .gallery-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .gallery-item figcaption {
+    padding-inline: 0.15rem;
+  }
+</style>

@@ -4,8 +4,12 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import NewsCard from '../components/NewsCard.astro';
 import PublicationCard from '../components/PublicationCard.astro';
 import Placeholder from '../components/Placeholder.astro';
-import { site, researchAreas } from '../lib/site';
+import { site } from '../lib/site';
 import { url } from '../lib/url';
+
+const researchAreas = (await getCollection('research')).sort(
+  (a, b) => a.data.order - b.data.order,
+);
 
 const news = (await getCollection('news'))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -44,8 +48,8 @@ const featured = (await getCollection('publications'))
         {
           researchAreas.map((area) => (
             <article class="card">
-              <h3>{area.title}</h3>
-              <p class="small muted">{area.summary}</p>
+              <h3>{area.data.title}</h3>
+              <p class="small muted">{area.data.summary}</p>
             </article>
           ))
         }

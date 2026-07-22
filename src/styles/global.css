@@ -279,7 +279,14 @@ main {
 }
 
 .grid--2 {
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  /* Min width high enough that this never packs more than two columns. */
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+}
+
+@media (max-width: 470px) {
+  .grid--2 {
+    grid-template-columns: 1fr;
+  }
 }
 
 .grid--3 {

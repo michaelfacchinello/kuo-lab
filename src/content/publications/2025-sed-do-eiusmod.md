@@ -4,7 +4,7 @@ authors: ['John Roe', 'Jane Doe', 'M. Kuo']
 venue: 'Proceedings of the Placeholder Conference'
 year: 2025
 type: 'conference'
-topic: 'Experimental Systems'
+topic: 'Chromatin & Epigenetics'
 selected: true
 doi: '10.0000/placeholder-0002'
 pdf: 'https://example.com/placeholder.pdf'

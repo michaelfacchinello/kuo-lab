@@ -4,11 +4,10 @@ authors: ['Jane Doe', 'A. N. Other', 'M. Kuo']
 venue: 'Journal of Placeholder Studies'
 year: 2026
 type: 'journal'
-topic: 'Computational Modeling'
+topic: 'Gene Expression & Regulation'
 selected: true
 doi: '10.0000/placeholder-0001'
 pdf: 'https://example.com/placeholder.pdf'
-code: 'https://example.com/placeholder-repo'
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor

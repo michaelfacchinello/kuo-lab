@@ -3,11 +3,10 @@ name: 'Dr. Kuo'
 title: 'Principal Investigator'
 role: 'pi'
 order: 0
-interests: ['Computational Modeling', 'Experimental Systems', 'Data & Methods']
+interests: ['Gene Expression & Regulation', 'Chromatin & Epigenetics', 'Cell Growth & Signaling']
 email: 'kuo@msu.edu'
 cv: 'https://example.com/placeholder-cv.pdf'
 scholar: 'https://scholar.google.com/'
-github: 'https://github.com/'
 website: 'https://example.com/'
 ---
 
