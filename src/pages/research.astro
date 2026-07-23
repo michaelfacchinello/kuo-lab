@@ -6,7 +6,7 @@ import Placeholder from '../components/Placeholder.astro';
 import { sponsors } from '../lib/site';
 import { url } from '../lib/url';
 
-const areas = (await getCollection('research')).sort((a, b) => a.data.order - b.data.order);
+const areas = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
 const rendered = await Promise.all(
   areas.map(async (area) => ({ area, Content: (await render(area)).Content })),
 );
@@ -14,11 +14,11 @@ const rendered = await Promise.all(
 
 <BaseLayout
   title="Research"
-  description="Research focus areas of The Kuo Lab at Michigan State University."
+  description="Research projects of The Kuo Lab at Michigan State University."
 >
   <PageHeader
     eyebrow="What we do"
-    title="Research Focus"
+    title="Projects"
     intro="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation."
   />
 
@@ -32,7 +32,7 @@ const rendered = await Promise.all(
                 <Placeholder label="Research Photo Here" ratio="4 / 3" />
               </div>
               <div class="area-copy">
-                <p class="eyebrow">Focus Area {String(i + 1).padStart(2, '0')}</p>
+                <p class="eyebrow">Project {String(i + 1).padStart(2, '0')}</p>
                 <h2>{area.data.title}</h2>
                 <div class="prose markdown">
                   <p>{area.data.summary}</p>
@@ -40,7 +40,7 @@ const rendered = await Promise.all(
                 </div>
                 <p class="area-link">
                   <a href={`${url('/publications')}?topic=${encodeURIComponent(area.data.title)}`}>
-                    Publications in this area →
+                    Publications in this project →
                   </a>
                 </p>
               </div>

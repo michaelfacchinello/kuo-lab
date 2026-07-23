@@ -73,12 +73,12 @@ const alumni = defineCollection({
 });
 
 /**
- * Research areas — one Markdown file per focus area. Frontmatter holds the
+ * Projects — one Markdown file per project. Frontmatter holds the
  * title/summary shown on cards; the body is the long description on the
  * Research page. `topic` values on publications should match these titles.
  */
-const research = defineCollection({
-  loader: glob({ pattern: '**/*.md', base: './src/content/research' }),
+const projects = defineCollection({
+  loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
   schema: z.object({
     title: z.string(),
     summary: z.string(),
@@ -86,4 +86,4 @@ const research = defineCollection({
   }),
 });
 
-export const collections = { news, publications, people, alumni, research };
+export const collections = { news, publications, people, alumni, projects };

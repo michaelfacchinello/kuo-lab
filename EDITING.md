@@ -19,7 +19,7 @@ own.
 | Publications | a file in `src/content/publications/` |
 | Current members (incl. PI bio) | a file in `src/content/people/` |
 | Alumni | a file in `src/content/alumni/` |
-| Research focus areas | a file in `src/content/research/` |
+| Projects | a file in `src/content/projects/` |
 | Lab name, mission statement, contact info, social links | `src/lib/site.ts` (fields are labeled — change text between the quotes only) |
 | Photos in the Gallery | `src/pages/gallery.astro` (ask for help the first time) |
 
@@ -72,7 +72,7 @@ One or two sentences about Sam's research interests go here.
 - `order` controls position on the page (lower = earlier).
 - Optional extra lines: `website: '…'`, `scholar: '…'`, `cv: '…'`.
 - The `interests` entries should match research area titles so tags look
-  consistent (see the files in `src/content/research/` for the current list).
+  consistent (see the files in `src/content/projects/` for the current list).
 
 ### New publication → `src/content/publications/2026-short-title.md`
 
@@ -127,7 +127,7 @@ now: 'Postdoctoral Fellow, Example University'
 
 - Alumni are listed alphabetically by name, so there's no order field.
 
-### New research focus area → `src/content/research/short-name.md`
+### New project → `src/content/projects/short-name.md`
 
 ```markdown
 ---
@@ -144,7 +144,7 @@ like.
 - The homepage cards and the Research page both update automatically —
   adding this file is all it takes.
 - Use the same `title` spelling in publications' `topic:` field so the
-  "Publications in this area" link and filter menu connect.
+  "Publications in this project" link and filter menu connect.
 
 ### Graduating someone
 

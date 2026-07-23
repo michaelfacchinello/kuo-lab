@@ -7,7 +7,7 @@ import Placeholder from '../components/Placeholder.astro';
 import { site } from '../lib/site';
 import { url } from '../lib/url';
 
-const researchAreas = (await getCollection('research')).sort(
+const projects = (await getCollection('projects')).sort(
   (a, b) => a.data.order - b.data.order,
 );
 
@@ -41,12 +41,12 @@ const featured = (await getCollection('publications'))
   <section class="section">
     <div class="container">
       <div class="section-heading">
-        <h2>Research Focus</h2>
-        <a href={url('/research')}>All research areas →</a>
+        <h2>Projects</h2>
+        <a href={url('/research')}>All projects →</a>
       </div>
       <div class="grid grid--3">
         {
-          researchAreas.map((area) => (
+          projects.map((area) => (
             <article class="card">
               <h3>{area.data.title}</h3>
               <p class="small muted">{area.data.summary}</p>

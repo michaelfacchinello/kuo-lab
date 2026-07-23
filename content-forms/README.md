@@ -8,7 +8,7 @@ script that converts the filled-in files into the site's Markdown content.
 | File | For | How it's filled in |
 | --- | --- | --- |
 | `Kuo-Lab-Member-Profile-Form.docx` | Each team member + the PI | Type into the boxes in Word; email back with a photo |
-| `Kuo-Lab-Content-Workbook.xlsx` | Publications, alumni, news, research areas | One row per item; dropdowns where choices are fixed |
+| `Kuo-Lab-Content-Workbook.xlsx` | Publications, alumni, news, projects | One row per item; dropdowns where choices are fixed |
 | `import-workbook.py` | You (or Claude) | Converts the filled-in workbook into `.md` files |
 
 ## The workflow

@@ -64,7 +64,7 @@ Most updates are Markdown edits and need no code changes.
 | Publications | `src/content/publications/*.md` — one file per paper |
 | People | `src/content/people/*.md` — one file per member; body is the bio |
 | Alumni | `src/content/alumni/*.md` — one file per person |
-| Research focus areas | `src/content/research/*.md` — one file per area |
+| Projects | `src/content/projects/*.md` — one file per project |
 | Lab name, PI, contact, socials, sponsors | `src/lib/site.ts` |
 
 Frontmatter fields for each collection are defined and validated in
@@ -106,7 +106,7 @@ Swap placeholders for real content per the checklist in `lab-website-spec.md` §
 components carry over unchanged:
 
 - [ ] Mission statement, PI bio, photo, CV → `src/lib/site.ts`, `src/content/people/kuo.md`
-- [ ] Research focus areas → `src/content/research/`
+- [ ] Projects → `src/content/projects/`
 - [ ] Publications (from BibTeX) → `src/content/publications/`
 - [ ] Team members and alumni → `src/content/people/`, `src/content/alumni/`
 - [ ] News items → `src/content/news/`

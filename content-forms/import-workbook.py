@@ -5,7 +5,7 @@ Convert the filled-in Kuo-Lab-Content-Workbook.xlsx into website content files.
 Usage:
     python3 content-forms/import-workbook.py content-forms/Kuo-Lab-Content-Workbook.xlsx
 
-Reads the Publications, Alumni, News, and Research Areas sheets and writes one
+Reads the Publications, Alumni, News, and Projects sheets and writes one
 Markdown file per row into the matching src/content/ folder. The example row
 (the yellow one) and blank rows are skipped automatically. Existing files are
 left alone unless --overwrite is passed.
@@ -26,12 +26,15 @@ except ImportError:
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT = ROOT / "src" / "content"
 
-# The example row's Title/Name/Headline — used to detect and skip it.
-EXAMPLE_MARKERS = {
-    "Regulation of chromatin state during cell division",
-    "Mary Major",
-    "Kuo Lab paper accepted at JCB",
-    "Chromatin & Epigenetics",  # research-areas example title
+# The example ("yellow") row is identified by the value in ONE specific column
+# per sheet — never by scanning every cell, or a real row that happens to reuse
+# an example value (e.g. a publication in the "Chromatin & Epigenetics" project)
+# would be dropped by mistake.
+EXAMPLE_BY_SHEET = {
+    "Publications": ("Title", "Regulation of chromatin state during cell division"),
+    "Alumni": ("Name", "Mary Major"),
+    "News": ("Headline", "Kuo Lab paper accepted at JCB"),
+    "Projects": ("Title", "Chromatin & Epigenetics"),
 }
 
 
@@ -72,8 +75,9 @@ def write(path, body, overwrite):
     return 1
 
 
-def is_example(record):
-    return any(str(v).strip() in EXAMPLE_MARKERS for v in record.values())
+def is_example(record, sheet):
+    field, value = EXAMPLE_BY_SHEET[sheet]
+    return str(record.get(field, "")).strip() == value
 
 
 def yes(value):
@@ -83,7 +87,7 @@ def yes(value):
 def import_publications(ws, overwrite):
     n = 0
     for rec in rows(ws):
-        if is_example(rec):
+        if is_example(rec, "Publications"):
             continue
         title = str(rec.get("Title", "")).strip()
         if not title:
@@ -97,7 +101,7 @@ def import_publications(ws, overwrite):
             f"venue: {q(rec.get('Venue'))}",
             f"year: {year_num}",
             f"type: {q(str(rec.get('Type','')).strip().lower() or 'journal')}",
-            f"topic: {q(rec.get('Research area'))}",
+            f"topic: {q(rec.get('Project'))}",
             f"selected: {'true' if yes(rec.get('Selected?')) else 'false'}",
         ]
         doi = str(rec.get("DOI", "")).strip()
@@ -115,7 +119,7 @@ def import_publications(ws, overwrite):
 def import_alumni(ws, overwrite):
     n = 0
     for rec in rows(ws):
-        if is_example(rec):
+        if is_example(rec, "Alumni"):
             continue
         name = str(rec.get("Name", "")).strip()
         if not name:
@@ -135,7 +139,7 @@ def import_alumni(ws, overwrite):
 def import_news(ws, overwrite):
     n = 0
     for rec in rows(ws):
-        if is_example(rec):
+        if is_example(rec, "News"):
             continue
         headline = str(rec.get("Headline", "")).strip()
         if not headline:
@@ -155,12 +159,12 @@ def import_news(ws, overwrite):
     return n
 
 
-def import_research(ws, overwrite):
+def import_projects(ws, overwrite):
     n = 0
     order = 1
     for rec in rows(ws):
         title = str(rec.get("Title", "")).strip()
-        if not title or is_example(rec):
+        if not title or is_example(rec, "Projects"):
             continue
         body = "\n".join([
             "---",
@@ -171,7 +175,7 @@ def import_research(ws, overwrite):
             str(rec.get("Full description", "")).strip(),
             "",
         ])
-        n += write(CONTENT / "research" / f"{slugify(title)}.md", body, overwrite)
+        n += write(CONTENT / "projects" / f"{slugify(title)}.md", body, overwrite)
         order += 1
     return n
 
@@ -180,7 +184,7 @@ IMPORTERS = {
     "Publications": import_publications,
     "Alumni": import_alumni,
     "News": import_news,
-    "Research Areas": import_research,
+    "Projects": import_projects,
 }
 
 
