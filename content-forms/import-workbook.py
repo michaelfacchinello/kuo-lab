@@ -5,13 +5,14 @@ Convert the filled-in Kuo-Lab-Content-Workbook.xlsx into website content files.
 Usage:
     python3 content-forms/import-workbook.py content-forms/Kuo-Lab-Content-Workbook.xlsx
 
-Reads the Publications, Alumni, News, and Projects sheets and writes one
-Markdown file per row into the matching src/content/ folder. The example row
+Reads the Members, Publications, Alumni, News, and Projects sheets and writes
+one Markdown file per row into the matching src/content/ folder. The example row
 (the yellow one) and blank rows are skipped automatically. Existing files are
 left alone unless --overwrite is passed.
 
-This does NOT touch People — member profiles come in on the Word form and are
-short enough to add by hand (or ask Claude to do it).
+Photos are not in the workbook — members email those separately. Save them into
+src/content/people/ (or public/) and wire them in when replacing the
+<Placeholder /> boxes with real images.
 """
 import sys
 import re
@@ -31,11 +32,15 @@ CONTENT = ROOT / "src" / "content"
 # an example value (e.g. a publication in the "Chromatin & Epigenetics" project)
 # would be dropped by mistake.
 EXAMPLE_BY_SHEET = {
+    "Members": ("Name", "Sam Park"),
     "Publications": ("Title", "Regulation of chromatin state during cell division"),
     "Alumni": ("Name", "Mary Major"),
     "News": ("Headline", "Kuo Lab paper accepted at JCB"),
     "Projects": ("Title", "Chromatin & Epigenetics"),
 }
+
+# Values (case-insensitive) that mean "don't publish my email".
+EMAIL_OPT_OUT = {"do not publish", "do-not-publish", "don't publish", "no", "private"}
 
 
 def slugify(text):
@@ -82,6 +87,42 @@ def is_example(record, sheet):
 
 def yes(value):
     return str(value).strip().lower() in {"yes", "y", "true", "x", "✓"}
+
+
+def import_members(ws, overwrite):
+    n = 0
+    order = 1
+    for rec in rows(ws):
+        if is_example(rec, "Members"):
+            continue
+        name = str(rec.get("Name", "")).strip()
+        if not name:
+            continue
+        is_pi = str(rec.get("Role", "")).strip().lower() == "pi"
+        fm = [
+            "---",
+            f"name: {q(name)}",
+            f"title: {q(rec.get('Position'))}",
+            f"role: {q('pi' if is_pi else 'member')}",
+            f"order: {0 if is_pi else order}",
+            f"interests: {yaml_list(rec.get('Project(s)'))}",
+        ]
+        email = str(rec.get("Email", "")).strip()
+        if email and email.lower() not in EMAIL_OPT_OUT:
+            fm.append(f"email: {q(email)}")
+        for field, key in [("Website", "website"), ("Google Scholar", "scholar"), ("CV link", "cv")]:
+            val = str(rec.get(field, "")).strip()
+            if val:
+                fm.append(f"{key}: {q(val)}")
+        fm.append("---\n")
+        body = str(rec.get("About you", "")).strip()
+        content = "\n".join(fm) + "\n" + body + "\n"
+        # PI always lands in kuo.md so it replaces the existing PI profile.
+        filename = "kuo.md" if is_pi else f"{slugify(name)}.md"
+        n += write(CONTENT / "people" / filename, content, overwrite)
+        if not is_pi:
+            order += 1
+    return n
 
 
 def import_publications(ws, overwrite):
@@ -181,6 +222,7 @@ def import_projects(ws, overwrite):
 
 
 IMPORTERS = {
+    "Members": import_members,
     "Publications": import_publications,
     "Alumni": import_alumni,
     "News": import_news,
